@@ -3,6 +3,6 @@ import { authenticateToken } from '@/middlewares';
 
 const hotelsRouter = Router();
 
-hotelsRouter.all('/*', authenticateToken).get('/hotels').get('/hotels/:hotelId');
+hotelsRouter.all('/*', authenticateToken).get('/').get('/:hotelId');
 
 export { hotelsRouter };
