@@ -40,3 +40,8 @@ export async function getHotelRooms(req: AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }
+const hotelsController = {
+  getAllHotels,
+  getHotelRooms,
+};
+export default hotelsController;
