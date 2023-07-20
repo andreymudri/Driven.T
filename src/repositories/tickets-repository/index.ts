@@ -53,19 +53,6 @@ async function ticketProcessPayment(ticketId: number) {
     },
   });
 }
-async function findTicketByUserId(userId: number) {
-  return await prisma.ticket.findFirst({
-    where: {
-      Enrollment: {
-        userId: userId,
-      },
-    },
-    include: {
-      TicketType: true,
-      Enrollment: true,
-    },
-  });
-}
 
 export default {
   findTicketTypes,
@@ -74,5 +61,4 @@ export default {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
-  findTicketByUserId,
 };
