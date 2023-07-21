@@ -17,10 +17,11 @@ async function checkBooking(userId: number, roomId: number) {
     throw forbiddenError();
   }
   const booking = await bookingRepository.getBooking(userId);
+  if (!booking.Room) throw forbiddenError();
   if (!booking) throw notFoundError();
   const room = booking.Room;
   const count = await bookingRepository.countRoomBookings(roomId);
-  if (room.capacity === count) throw forbiddenError;
+  if (room.capacity === count) throw forbiddenError();
 }
 async function createBooking(userId: number, roomId: number) {
   await checkBooking(userId, roomId);
