@@ -20,7 +20,7 @@ async function createBooking(req: AuthenticatedRequest, res: Response) {
     const { roomId } = req.body as inputBookingBody;
     const { userId } = req;
     const booking = await bookingService.createBooking(userId, roomId);
-    return res.status(httpStatus.OK).send({ bookingId: booking });
+    return res.status(httpStatus.OK).send({ bookingId: booking.id });
   } catch (error) {
     if (error.name === 'NotFoundError') return res.sendStatus(404);
     if (error.name === 'ForbiddenError') return res.status(403).send('ForbiddenError: Cannot add booking');
@@ -33,7 +33,7 @@ async function editBooking(req: AuthenticatedRequest, res: Response) {
     const bookingId = Number(req.params.bookingId);
     const { roomId } = req.body as inputBookingBody;
     const booking = await bookingService.updateBooking(userId, roomId, bookingId);
-    return res.status(httpStatus.OK).send({ bookingId: booking });
+    return res.status(httpStatus.OK).send({ bookingId: booking.id });
   } catch (error) {
     if (error.name === 'NotFoundError') return res.sendStatus(404);
     if (error.name === 'ForbiddenError') return res.status(403).send('ForbiddenError: Cannot edit booking');
