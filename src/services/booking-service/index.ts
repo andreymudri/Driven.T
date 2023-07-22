@@ -17,7 +17,7 @@ async function checkBooking(userId: number, roomId: number) {
     throw forbiddenError();
   }
   const booking = await bookingRepository.getBooking(userId);
-  if (!booking.Room) throw forbiddenError();
+  if (!booking.Room) throw notFoundError();
   if (!booking) throw notFoundError();
   const room = booking.Room;
   const count = await bookingRepository.countRoomBookings(roomId);
