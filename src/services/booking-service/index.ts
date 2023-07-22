@@ -10,15 +10,15 @@ async function getBooking(userId: number) {
   return booking;
 }
 async function checkBooking(userId: number, roomId: number) {
-  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
-
-  if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
-    throw forbiddenError();
-  }
   const booking = await bookingRepository.getBooking(userId);
   if (!booking.Room) throw notFoundError();
   if (!booking) throw notFoundError();
+
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
+  if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
+    throw forbiddenError();
+  }
   const room = booking.Room;
   const count = await bookingRepository.countRoomBookings(roomId);
   if (room.capacity === count) throw forbiddenError();
