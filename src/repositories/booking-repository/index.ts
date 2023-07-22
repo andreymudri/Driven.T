@@ -25,7 +25,7 @@ async function updateBooking(bookingId: number, roomId: number) {
   const updatedbooking = await prisma.booking.update({
     where: { id: bookingId },
     data: {
-      roomId,
+      roomId: roomId,
       updatedAt: new Date(),
     },
   });
