@@ -27,7 +27,7 @@ async function createBooking(userId: number, roomId: number) {
 async function updateBooking(userId: number, bookingId: number, roomId: number) {
   const getbooking = await bookingRepository.getBooking(userId);
   if (!getbooking.Room) throw notFoundError();
-  if (!getbooking) throw notFoundError();
+
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
   if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
