@@ -38,11 +38,19 @@ async function countRoomBookings(roomId: number) {
   });
   return counter;
 }
-
+async function getRoomById(roomId: number) {
+  const room = await prisma.room.findFirst({
+    where: {
+      id: roomId,
+    },
+  });
+  return room;
+}
 const bookingRepository = {
   getBooking,
   createBooking,
   updateBooking,
   countRoomBookings,
+  getRoomById,
 };
 export default bookingRepository;
