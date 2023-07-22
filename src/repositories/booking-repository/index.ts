@@ -33,7 +33,7 @@ async function updateBooking(bookingId: number, roomId: number) {
 }
 
 async function countRoomBookings(roomId: number) {
-  const counter = prisma.booking.count({
+  const counter = await prisma.booking.count({
     where: { roomId },
   });
   return counter;
