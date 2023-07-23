@@ -4,8 +4,8 @@ import { prisma } from '@/config';
 export async function createBooking(userId: number, roomId: number) {
   const Booking = await prisma.booking.create({
     data: {
-      userId,
-      roomId,
+      userId: userId,
+      roomId: roomId,
       createdAt: new Date(),
     },
   });

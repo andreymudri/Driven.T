@@ -25,18 +25,23 @@ async function createBooking(userId: number, roomId: number) {
 }
 
 async function updateBooking(userId: number, bookingId: number, roomId: number) {
-  const getbooking = await bookingRepository.getBooking(userId);
-  if (!getbooking.Room) throw notFoundError();
+  const room = await bookingRepository.getRoomById(roomId);
+  console.log(room);
+  if (!room) throw notFoundError();
+  const count = await bookingRepository.countRoomBookings(roomId);
+  console.log(count);
+  if (room.capacity === count) throw forbiddenError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
   if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
     throw forbiddenError();
   }
-  const room = await bookingRepository.getRoomById(roomId);
-  if (!room) throw notFoundError();
-  const count = await bookingRepository.countRoomBookings(roomId);
-  if (room.capacity === count) throw forbiddenError();
+
+  const check = await getBooking(userId);
+  console.log('getbooking', check);
+  if (!check) throw forbiddenError();
+
   const booking = await bookingRepository.updateBooking(bookingId, roomId);
   return booking;
 }

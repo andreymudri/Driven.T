@@ -32,7 +32,7 @@ async function editBooking(req: AuthenticatedRequest, res: Response) {
     const { userId } = req;
     const bookingId = Number(req.params.bookingId);
     const { roomId } = req.body as inputBookingBody;
-    const booking = await bookingService.updateBooking(userId, roomId, bookingId);
+    const booking = await bookingService.updateBooking(userId, bookingId, roomId);
     return res.status(httpStatus.OK).send({ bookingId: booking.id });
   } catch (error) {
     if (error.name === 'NotFoundError') return res.sendStatus(404);

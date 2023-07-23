@@ -1,14 +1,13 @@
+import { Room } from '@prisma/client';
 import { prisma } from '@/config';
 
-async function getBooking(userId: number) {
-  const bookings = await prisma.booking.findFirst({
-    select: {
-      id: true,
+async function getBooking(userId: number): Promise<{ id: number; Room: Room }> {
+  return await prisma.booking.findFirst({
+    where: { userId },
+    include: {
       Room: true,
     },
-    where: { userId },
   });
-  return bookings;
 }
 
 async function createBooking(userId: number, roomId: number) {
