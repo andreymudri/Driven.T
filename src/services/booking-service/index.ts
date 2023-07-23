@@ -25,11 +25,12 @@ async function createBooking(userId: number, roomId: number) {
 }
 
 async function updateBooking(userId: number, bookingId: number, roomId: number) {
+  const check = await getBooking(userId);
+  if (!check) throw forbiddenError();
+
   const room = await bookingRepository.getRoomById(roomId);
-  console.log(room);
   if (!room) throw notFoundError();
   const count = await bookingRepository.countRoomBookings(roomId);
-  console.log(count);
   if (room.capacity === count) throw forbiddenError();
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
@@ -37,10 +38,6 @@ async function updateBooking(userId: number, bookingId: number, roomId: number) 
   if (ticket.TicketType.isRemote || !ticket.TicketType.includesHotel || ticket.status !== 'PAID') {
     throw forbiddenError();
   }
-
-  const check = await getBooking(userId);
-  console.log('getbooking', check);
-  if (!check) throw forbiddenError();
 
   const booking = await bookingRepository.updateBooking(bookingId, roomId);
   return booking;
