@@ -66,6 +66,39 @@ describe('POST /booking', () => {
       message: 'Access Denied. You dont have permission to access',
     });
   });
+
+  it('should reject with notFoundError if room does not exist', async () => {
+    const enrollmentMock = jest.spyOn(enrollmentRepository, 'findWithAddressByUserId');
+    enrollmentMock.mockImplementationOnce((): any => {
+      return 1;
+    });
+    const ticketMock = jest.spyOn(ticketRepository, 'findTicketByEnrollmentId');
+    ticketMock.mockImplementationOnce((): any => {
+      return {
+        TicketType: {
+          id: 1234,
+          name: '123',
+          price: 1,
+          isRemote: false,
+          includesHotel: true,
+          createdAt: Date,
+          updatedAt: Date,
+        },
+        status: 'PAID',
+      };
+    });
+    const roomMockRepository = jest.spyOn(bookingRepository, 'getRoomById');
+    roomMockRepository.mockImplementationOnce((): any => {
+      return null;
+    });
+    const userId = faker.datatype.number({ min: 1, max: 10000000 });
+    const roomId = faker.datatype.number({ min: 1, max: 10000000 });
+    const promise = bookingService.createBooking(userId, roomId);
+    await expect(promise).rejects.toEqual({
+      name: 'NotFoundError',
+      message: 'No result for this search!',
+    });
+  });
 });
 
 describe('PUT /booking', () => {
