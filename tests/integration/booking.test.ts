@@ -1,4 +1,3 @@
-import { TicketType } from '@prisma/client';
 import httpStatus from 'http-status';
 import faker from '@faker-js/faker';
 import supertest from 'supertest';
@@ -9,7 +8,6 @@ import {
   createBooking,
   createEnrollmentWithAddress,
   createHotel,
-  createPayment,
   createRoomWithHotelId,
   createTicket,
   createTicketTypeWithHotel,
@@ -178,7 +176,7 @@ describe('when creating a booking', () => {
     const ticketType = await createTicketTypeWithHotel();
     await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
     const hotel = await createHotel();
-    const room = await createRoomWithHotelId(hotel.id);
+    await createRoomWithHotelId(hotel.id);
 
     const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send({
       roomId: Infinity,
